@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>小红书种草手写标注工具</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="workspace">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">XHS note maker</p>
+            <h1>小红书种草手写标注工具</h1>
+          </div>
+          <div class="actions">
+            <label class="button secondary">
+              上传图片
+              <input id="imageInput" type="file" accept="image/*" />
+            </label>
+            <button id="exportButton" class="button primary" type="button">导出 PNG</button>
+          </div>
+        </header>
+
+        <div class="canvas-wrap">
+          <canvas id="posterCanvas" width="1080" height="1440" aria-label="种草图片预览"></canvas>
+        </div>
+      </section>
+
+      <aside class="panel" aria-label="编辑面板">
+        <section class="panel-section">
+          <h2>模板</h2>
+          <div class="template-grid" id="templateGrid"></div>
+        </section>
+
+        <section class="panel-section">
+          <div class="section-title">
+            <h2>标注文案</h2>
+            <button id="addNoteButton" class="icon-button" type="button" title="添加一条">+</button>
+          </div>
+          <div id="noteList" class="note-list"></div>
+        </section>
+
+        <section class="panel-section compact-controls">
+          <h2>画面</h2>
+          <label>
+            线条松弛感
+            <input id="jitterRange" type="range" min="1" max="10" value="6" />
+          </label>
+          <label>
+            白线粗细
+            <input id="lineRange" type="range" min="1" max="5" value="2" />
+          </label>
+          <label>
+            字体大小
+            <input id="fontRange" type="range" min="24" max="54" value="36" />
+          </label>
+          <label>
+            手写感
+            <input id="handRange" type="range" min="0" max="10" value="7" />
+          </label>
+        </section>
+
+        <section class="panel-section">
+          <h2>快捷词</h2>
+          <div class="chip-row" id="quickChips"></div>
+        </section>
+      </aside>
+    </main>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
