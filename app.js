@@ -533,12 +533,58 @@ handRange.addEventListener("input", () => {
   draw();
 });
 
-exportButton.addEventListener("click", () => {
+function downloadPosterFromUrl(url) {
   const link = document.createElement("a");
   link.download = `xiaohongshu-note-${Date.now()}.png`;
-  link.href = canvas.toDataURL("image/png");
+  link.href = url;
+  link.style.display = "none";
+  document.body.appendChild(link);
   link.click();
-});
+  link.remove();
+  exportButton.dataset.exportedAt = String(Date.now());
+  exportButton.textContent = "已导出";
+  setTimeout(() => {
+    exportButton.textContent = "导出 PNG";
+  }, 1400);
+}
+
+function exportPoster() {
+  exportButton.dataset.exportStartedAt = String(Date.now());
+  exportButton.dataset.exportError = "";
+
+  const fallbackToDataUrl = () => {
+    try {
+      downloadPosterFromUrl(canvas.toDataURL("image/png"));
+    } catch (error) {
+      exportButton.dataset.exportError = String(error?.message || error);
+      exportButton.textContent = "导出失败";
+      setTimeout(() => {
+        exportButton.textContent = "导出 PNG";
+      }, 1800);
+    }
+  };
+
+  if (!canvas.toBlob) {
+    fallbackToDataUrl();
+    return;
+  }
+
+  try {
+    canvas.toBlob((blob) => {
+      if (!blob) {
+        fallbackToDataUrl();
+        return;
+      }
+      const url = URL.createObjectURL(blob);
+      downloadPosterFromUrl(url);
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }, "image/png");
+  } catch {
+    fallbackToDataUrl();
+  }
+}
+
+exportButton.addEventListener("click", exportPoster);
 
 renderTemplates();
 renderNotes();
